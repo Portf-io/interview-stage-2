@@ -47,22 +47,16 @@ export async function evaluate(
   portfolio: Portfolio,
   rules: Rule[]
 ): Promise<EvaluationResult[]> {
-  // This function will be implemented by the candidate
   console.log('Evaluating portfolio:', portfolio);
   console.log('Against rules:', rules);
-  // Example:
-  // For each rule, check against the portfolio
-  // Return an array of EvaluationResult
   throw new Error('Not implemented');
 }
 
 async function main() {
-  // Example usage: Evaluate each portfolio against all rules
-  // In a real scenario, you would likely have a mapping of portfolios to specific rule sets
   for (const portfolio of mockPortfolios) {
     console.log(`\nEvaluating rules for investor ${portfolio.investorId}`);
     try {
-      const results = await evaluate(portfolio, mockRules); // Passing all rules for simplicity
+      const results = await evaluate(portfolio, mockRules); 
       console.log('Results:', results);
     } catch (error) {
       console.error('Error during evaluation:', error);

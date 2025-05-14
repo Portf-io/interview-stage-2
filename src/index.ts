@@ -3,7 +3,7 @@ import { EvaluationResult, Rule, Portfolio } from "./types";
 // Mock Data
 export const mockPortfolios: Portfolio[] = [
   {
-    investorId: 'INV001',
+    investorId: 1,
     companies: [
       { id: 'AAPL', name: 'Company A', category: 'technology', revenue: 5000000, esgScore: 75, cashReserves: 1000000, monthlyBurnRate: 150000 },
       { id: 'MSFT', name: 'Company B ', category: 'software', revenue: 12000000, esgScore: 85, cashReserves: 3000000, monthlyBurnRate: 250000 },
@@ -12,7 +12,7 @@ export const mockPortfolios: Portfolio[] = [
     ],
   },
   {
-    investorId: 'INV002',
+    investorId: 2,
     companies: [
       { id: 'TSLA', name: 'Company E', category: 'manufacturing', revenue: 25000000, esgScore: 65, cashReserves: 5000000, monthlyBurnRate: 750000 },
       { id: 'GOOG', name: 'Company F', category: 'data analytics', revenue: 18000000, esgScore: 90, cashReserves: 6000000, monthlyBurnRate: 400000 },
@@ -25,6 +25,7 @@ export const mockPortfolios: Portfolio[] = [
 export const mockRules: Rule[] = [
   {
     id: 'CASH_RUNWAY_MIN_6_MONTHS',
+    investorId: 1,
     type: 'cash_runway',
     config: { 
       minMonths: 6 
@@ -32,6 +33,7 @@ export const mockRules: Rule[] = [
   },
   {
     id: 'ESG_SCORE_MIN_70',
+    investorId: 2,
     type: 'custom_kpi_below', // Assuming this means the KPI must NOT be below the threshold (i.e., KPI >= threshold)
     config: { 
       kpiName: 'esgScore', 

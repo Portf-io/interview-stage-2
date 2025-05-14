@@ -9,7 +9,7 @@ export interface Company {
 }
 
 export interface Portfolio {
-  investorId: string;
+  investorId: number;
   companies: Company[];
 }
 
@@ -17,6 +17,7 @@ export type RuleType = "custom_kpi_below" | "cash_runway" | "revenue_drop";
 
 export interface Rule {
   id: string;
+  investorId: number;
   type: RuleType;
   config: Record<string, unknown>; 
 }

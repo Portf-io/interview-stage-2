@@ -1,4 +1,3 @@
-// Company structure
 export interface Company {
   id: string; // e.g., stock symbol or internal ID
   name: string;
@@ -9,7 +8,6 @@ export interface Company {
   monthlyBurnRate?: number; // Monthly cash burn
 }
 
-// Portfolio of companies
 export interface Portfolio {
   investorId: string;
   companies: Company[];
@@ -20,7 +18,7 @@ export type RuleType = "custom_kpi_below" | "cash_runway" | "revenue_drop";
 export interface Rule {
   id: string;
   type: RuleType;
-  config: Record<string, unknown>; /
+  config: Record<string, unknown>; 
 }
 
 // Evaluation result format

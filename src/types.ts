@@ -25,6 +25,7 @@ export interface Rule {
 // Evaluation result format
 export interface EvaluationResult {
   ruleId: string;
+  companyId: string;
   passed: boolean;
   message?: string;
 } 

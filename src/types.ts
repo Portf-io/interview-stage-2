@@ -15,11 +15,23 @@ export interface Portfolio {
 
 export type RuleType = 'custom_kpi_below' | 'cash_runway' | 'revenue_drop';
 
+export type RuleConfig = {
+    ruleType: 'cash_runway',
+    minMonths: number,
+} | {
+    ruleType: 'revenue_drop',
+    precent: number,
+} | {
+    ruleType: 'custom_kpi_below',
+    kpiName: string,
+    threshold: number
+};
+
 export interface Rule {
   id: string;
   investorId: number;
-  type: RuleType;
-  config: Record<string, unknown>;
+//   type: RuleType;
+  config: RuleConfig;
 }
 
 // Evaluation result format

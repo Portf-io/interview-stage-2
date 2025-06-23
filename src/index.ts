@@ -1,4 +1,4 @@
-import { EvaluationResult, Rule, Portfolio } from './types';
+import { EvaluationResult, Rule, Portfolio, RuleType } from './types';
 
 // Mock Data
 export const mockPortfolios: Portfolio[] = [
@@ -90,27 +90,90 @@ export const mockRules: Rule[] = [
   {
     id: 'CASH_RUNWAY_MIN_6_MONTHS',
     investorId: 1,
-    type: 'cash_runway',
     config: {
-      minMonths: 6,
+        ruleType: "cash_runway",
+        minMonths: 6,
     },
   },
   {
     id: 'ESG_SCORE_MIN_70',
     investorId: 2,
-    type: 'custom_kpi_below', // Assuming this means the KPI must NOT be below the threshold (i.e., KPI >= threshold)
+    // type: 'custom_kpi_below', // Assuming this means the KPI must NOT be below the threshold (i.e., KPI >= threshold)
     config: {
-      kpiName: 'esgScore',
-      threshold: 70,
+        ruleType: "custom_kpi_below",
+        kpiName: "esgScore",
+        threshold: 70,
     },
   },
 ];
 
+function handleCashRunway(portfolio: Portfolio, rule: Rule){
+
+    const results: EvaluationResult[] = [];
+
+    for(const company of portfolio.companies){
+
+        if(!company.cashReserves || ! company.monthlyBurnRate){
+            results.push({
+                companyId: company.id,
+                passed: false,
+                ruleId: rule.id,
+                message: "No cash reserves or monthly burn rate!"
+            });
+
+            continue;
+        }
+
+        const minMonths = rule.config.minMonths;
+
+        const passed = company.cashReserves >= company.monthlyBurnRate * minMonths;
+
+        results.push({
+            companyId: company.id,
+            passed,
+            ruleId: rule.id,
+        })
+    }
+
+    return results;
+}
+
+const handlerRules : Record < RuleType, any > = {
+    "cash_runway" : handleCashRunway,
+    "custom_kpi_below": ()=>{},
+    "revenue_drop": ()=>{},
+}
+
 // Function to be implemented by the candidate
 export async function evaluate(portfolio: Portfolio, rules: Rule[]) {
-  console.log('Evaluating portfolio:', portfolio);
-  console.log('Against rules:', rules);
-  throw new Error('Not implemented');
+
+    const investorId = portfolio.investorId;
+    
+    const usedRules = rules.filter((rule)=>rule.investorId === investorId);
+
+    const results: EvaluationResult[][] = [];
+
+    const promises = [];
+
+    for(const rules of usedRules){
+        const ruleType = rules.config.ruleType;
+        const ruleResults = handlerRules[ruleType](portfolio, rules);
+
+        for(const ruleresult of ruleResults){
+
+            if(!ruleresult.passed){
+                const promise = sendMessage({company: ruleresult});
+                promises.push(promise);
+            }
+
+        }
+
+        results.push(ruleResults);
+    }
+
+    await Promise.all(promises);
+
+    return results;
 }
 
 async function main() {
